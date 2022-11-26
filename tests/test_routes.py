@@ -6,6 +6,7 @@ Test cases can be run with the following:
   coverage report -m
 """
 import os
+import json
 import logging
 from unittest import TestCase
 from tests.factories import AccountFactory
@@ -139,3 +140,17 @@ class TestAccountService(TestCase):
         """It should not read an Account that is not found"""
         response = self.client.get(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_accounts(self):
+        """It should list all accounts"""
+        accounts = self._create_accounts(5)
+        response = self.client.get(f"{BASE_URL}")
+        response_list = json.loads(response.text)
+        self.assertEqual(len(accounts), len(response_list))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_empty_account_list(self):
+        """It should return an empty list when there are no accounts"""
+        response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(0, len(json.loads(response.text)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
