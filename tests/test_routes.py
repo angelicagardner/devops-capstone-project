@@ -175,6 +175,7 @@ class TestAccountService(TestCase):
         self.assertEqual(response_json['email'], updated_response.get_json()['email'])
 
     def test_update_not_exist_account(self):
+        """It should try to update an account that doesn't exist, and fail to"""
         put_response = self.client.put(
             f"{BASE_URL}/0",
             json={}
@@ -194,3 +195,8 @@ class TestAccountService(TestCase):
         self.assertEqual(delete_request.status_code, status.HTTP_204_NO_CONTENT)
         deleted_response = self.client.get(f"{BASE_URL}")
         self.assertEqual(0, len(json.loads(deleted_response.text)))
+        
+    def test_method_not_allowed(self):
+        """It should not allow an illegal method call"""
+        resp = self.client.delete(BASE_URL)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
