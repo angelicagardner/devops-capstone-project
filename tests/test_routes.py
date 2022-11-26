@@ -173,3 +173,24 @@ class TestAccountService(TestCase):
             f"{BASE_URL}/{account.id}", content_type="application/json"
         )
         self.assertEqual(response_json['email'], updated_response.get_json()['email'])
+
+    def test_update_not_exist_account(self):
+        put_response = self.client.put(
+            f"{BASE_URL}/0",
+            json={}
+        )
+        self.assertEqual(put_response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_an_account(self):
+        """It should Delete a single Account"""
+        response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(0, len(json.loads(response.text)))
+        account = self._create_accounts(1)[0]
+        created_response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(1, len(json.loads(created_response.text)))
+        delete_request = self.client.delete(
+          f"{BASE_URL}/{account.id}"  
+        )
+        self.assertEqual(delete_request.status_code, status.HTTP_204_NO_CONTENT)
+        deleted_response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(0, len(json.loads(deleted_response.text)))
