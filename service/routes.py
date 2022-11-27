@@ -16,7 +16,9 @@ import json
 ############################################################
 @app.route("/health")
 def health():
-    """Health Status"""
+    """
+    Health Status
+    """
     return jsonify(dict(status="OK")), status.HTTP_200_OK
 
 
@@ -25,7 +27,9 @@ def health():
 ######################################################################
 @app.route("/")
 def index():
-    """Root URL response"""
+    """
+    Root URL response
+    """
     return (
         jsonify(
             name="Account REST API Service",
@@ -58,10 +62,10 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
-
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """
@@ -74,6 +78,7 @@ def list_accounts():
     return make_response(
         json.dumps(accounts, default=str), status.HTTP_200_OK
     )
+
 
 ######################################################################
 # READ AN ACCOUNT
@@ -94,7 +99,6 @@ def get_accounts(account_id):
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
-
 @app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_accounts(account_id):
     """
@@ -113,7 +117,6 @@ def update_accounts(account_id):
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
-
 @app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_account(account_id):
     """
@@ -126,13 +129,14 @@ def delete_account(account_id):
         account.delete()
     return "", status.HTTP_204_NO_CONTENT
 
+
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
-
-
 def check_content_type(media_type):
-    """Checks that the media type is correct"""
+    """
+    Checks that the media type is correct
+    """
     content_type = request.headers.get("Content-Type")
     if content_type and content_type == media_type:
         return
