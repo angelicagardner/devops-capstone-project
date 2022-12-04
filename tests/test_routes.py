@@ -152,7 +152,7 @@ class TestAccountService(TestCase):
         response_list = json.loads(response.text)
         self.assertEqual(len(accounts), len(response_list))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_empty_account_list(self):
         """It should return an empty list when there are no accounts"""
         response = self.client.get(f"{BASE_URL}")
@@ -194,17 +194,16 @@ class TestAccountService(TestCase):
         created_response = self.client.get(f"{BASE_URL}")
         self.assertEqual(1, len(json.loads(created_response.text)))
         delete_request = self.client.delete(
-          f"{BASE_URL}/{account.id}"  
+          f"{BASE_URL}/{account.id}"
         )
         self.assertEqual(delete_request.status_code, status.HTTP_204_NO_CONTENT)
         deleted_response = self.client.get(f"{BASE_URL}")
         self.assertEqual(0, len(json.loads(deleted_response.text)))
-        
+
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         resp = self.client.delete(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
 
     def test_security_headers(self):
         """
